@@ -3,18 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^9.1.4",
+    "inquirer": "^8.2.5",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "jest": "^29.4.3"
   }
 }
