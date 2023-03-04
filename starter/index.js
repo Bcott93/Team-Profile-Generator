@@ -28,7 +28,66 @@ function validateEmail(input) {
       : "I did not detect a valid email address, please try again"
   }
 
-function runTeamManagerQs() {
+function EngineerQs() {
+    return inquirer.prompt([
+    {
+        type: "input",
+        message: "Engineer's name?",
+        name: "engName",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Engineer's id?",
+        name: "engId",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Engineer's email?",
+        name: "engEmail",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Engineer's GitHub Username?",
+        name: "engGitHub",
+        validate: validateUserInput,
+    },
+   
+])
+}
+
+function InternQs() {
+    return   inquirer.prompt([
+    {
+        type: "input",
+        message: "Intern's name?",
+        name: "intName",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Intern's id?",
+        name: "intId",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Intern's email?",
+        name: "intEmail",
+        validate: validateUserInput,
+    },
+    {
+        type: "input",
+        message: "Intern's School?",
+        name: "intSchool",
+        validate: validateUserInput,
+    },
+])
+} 
+
+function TeamProfileGenerator() {
 return inquirer.prompt([
     {
       type: "input",
@@ -58,12 +117,12 @@ return inquirer.prompt([
     
 
 ]).then ((response) => {
-    runTeamMemberChoice(response)
+    TeamMemberChoice(response)
 })
 
 }
 
-function runTeamMemberChoice() {
+function TeamMemberChoice() {
     return inquirer.prompt([
     {
         type: "list",
@@ -75,92 +134,18 @@ function runTeamMemberChoice() {
 
 ]).then((response) => {    
     if (response.tmChoose === tmChoices[0]) {
-        runEngineerQs().then((response) => {
-            runFinishQs().then((response) => {
-                if (response.finish === finish[0]) {
-                    runTeamMemberChoice() 
-                } else {
-                    console.log("Well done! You've finished creating your team")
-                }
-               
-                
-            })
+        EngineerQs().then(() => {
+            FinishQs()
         })
     } else {
-        runInternQs().then((response) => {
-            runFinishQs().then((response) => {
-                if (response.finish === finish[0]) {
-                    runTeamMemberChoice() 
-                } else {
-                    console.log("Well done! You've finished creating your team")
-                }
-
-            })
+        InternQs().then(() => {
+            FinishQs()
         })
     }
 })
 }
 
-function runEngineerQs() {
-    return inquirer.prompt([
-    {
-        type: "input",
-        message: "Engineer's name?",
-        name: "engName",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Engineer's id?",
-        name: "engId",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Engineer's email?",
-        name: "engEmail",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Engineer's GitHub?",
-        name: "engGitHub",
-        validate: validateUserInput,
-    },
-   
-])
-}
-
-function runInternQs() {
-    return   inquirer.prompt([
-    {
-        type: "input",
-        message: "Intern's name?",
-        name: "intName",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Intern's id?",
-        name: "intId",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Intern's email?",
-        name: "intEmail",
-        validate: validateUserInput,
-    },
-    {
-        type: "input",
-        message: "Intern's School?",
-        name: "intSchool",
-        validate: validateUserInput,
-    },
-])
-} 
-
-function runFinishQs() {
+function FinishQs() {
     return inquirer.prompt([
     {
         type: "list",
@@ -168,15 +153,18 @@ function runFinishQs() {
         name: "finish",
         choices: finish,
     } 
-])
+]).then((response) => {
+    if (response.finish === finish[0]) {
+        TeamMemberChoice() 
+    } else {
+        console.log("Well done! You've finished creating your team")
+    }
+   
+    
+})
 }
 
-
-function runQuestions() {
-    runTeamManagerQs()
-}
-
-runQuestions()
+TeamProfileGenerator()
 
 
 
