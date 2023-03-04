@@ -14,8 +14,22 @@ const render = require("./src/page-template.js");
 const tmChoices = ["Engineer", "Intern"]
 const finish = ["Choose another team member", "I'm finished creating my team"]
 
-inquirer
-  .prompt([
+// Ternary operator to check if the the userInput has a value or not
+function validateUserInput(input) {
+    return input !== ""
+      ? true
+      : "I did not detect a value, please enter a valid input"
+  }
+
+  // Ternary operator to check if the the userInput includes a @ or not
+function validateEmail(input) {
+    return input.includes("@")
+      ? true
+      : "I did not detect a valid email address, please try again"
+  }
+
+function runTeamManagerQs() {
+return inquirer.prompt([
     {
       type: "input",
       message: "Who is your team manager?",
@@ -40,6 +54,17 @@ inquirer
         name: "tmOffice",
         validate: validateUserInput,
     },
+  
+    
+
+]).then ((response) => {
+    runTeamMemberChoice(response)
+})
+
+}
+
+function runTeamMemberChoice() {
+    return inquirer.prompt([
     {
         type: "list",
         message: "Select a team member:",
@@ -47,6 +72,37 @@ inquirer
         choices: tmChoices,
         
     },
+
+]).then((response) => {    
+    if (response.tmChoose === tmChoices[0]) {
+        runEngineerQs().then((response) => {
+            runFinishQs().then((response) => {
+                if (response.finish === finish[0]) {
+                    runTeamMemberChoice() 
+                } else {
+                    console.log("Well done! You've finished creating your team")
+                }
+               
+                
+            })
+        })
+    } else {
+        runInternQs().then((response) => {
+            runFinishQs().then((response) => {
+                if (response.finish === finish[0]) {
+                    runTeamMemberChoice() 
+                } else {
+                    console.log("Well done! You've finished creating your team")
+                }
+
+            })
+        })
+    }
+})
+}
+
+function runEngineerQs() {
+    return inquirer.prompt([
     {
         type: "input",
         message: "Engineer's name?",
@@ -71,6 +127,12 @@ inquirer
         name: "engGitHub",
         validate: validateUserInput,
     },
+   
+])
+}
+
+function runInternQs() {
+    return   inquirer.prompt([
     {
         type: "input",
         message: "Intern's name?",
@@ -95,14 +157,39 @@ inquirer
         name: "intSchool",
         validate: validateUserInput,
     },
+])
+} 
+
+function runFinishQs() {
+    return inquirer.prompt([
     {
         type: "list",
         message: "Would you like to add another team member?",
         name: "finish",
         choices: finish,
-    }
+    } 
+])
+}
+
+
+function runQuestions() {
+    runTeamManagerQs()
+}
+
+runQuestions()
+
+
+
+ 
+
+
+
+
+
+
+ 
     
-  ])
+ 
 
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
