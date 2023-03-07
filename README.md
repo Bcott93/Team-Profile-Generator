@@ -31,6 +31,7 @@ User input will be validated at each stage.
 
 To view the project, please follow the links below
 
+https://bcott93.github.io/Team-Profile-Generator/
 https://github.com/Bcott93/Team-Profile-Generator
 
 ![Sample Application](assets/images/sample.jpg)
