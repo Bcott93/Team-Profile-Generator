@@ -11,10 +11,9 @@ const OUTPUT_DIR = path.resolve(__dirname, "./assets/output")
 const outputPath = path.join(OUTPUT_DIR, "team.html")
 
 // Accesses the data for the HTML page
-const render = require("./src/page-template.js")
+const render = require("./assets/src/page-template.js")
 
-
-// Arrays - used to collect data from the Inquirer
+// Arrays - used to collect userInput from the Inquirer node
 const employees = []
 
 // Choice arrays for the Inquirer
@@ -34,6 +33,7 @@ function validateEmail(input) {
       ? true
       : "I did not detect a valid email address, please try again"
   }
+
 // Collects and validates the user answers to the Inquirer questions RE: Engineer/s 
 function EngineerQs() {
     return inquirer.prompt([
@@ -53,7 +53,7 @@ function EngineerQs() {
         type: "input",
         message: "Engineer's email?",
         name: "engEmail",
-        validate: validateUserInput,
+        validate: validateEmail,
     },
     {
         type: "input",
@@ -61,14 +61,11 @@ function EngineerQs() {
         name: "engGithub",
         validate: validateUserInput,
     },
-
-   
-   // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
-   // Pushes that data to the relevant array, then console logs the collected data for a better user experience
+    // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
+    // Pushes that data to the relevant array
 ]).then((response) => {
-const engineer = new Engineer (response.engName, response.engId, response.engEmail, response.engGithub)
-employees.push(engineer)
-console.log(engineer)
+    const engineer = new Engineer (response.engName, response.engId, response.engEmail, response.engGithub)
+    employees.push(engineer)
 })
  
 }
@@ -91,7 +88,7 @@ function InternQs() {
         type: "input",
         message: "Intern's email?",
         name: "intEmail",
-        validate: validateUserInput,
+        validate: validateEmail,
     },
     {
         type: "input",
@@ -100,16 +97,15 @@ function InternQs() {
         validate: validateUserInput,
     },
     // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
-    // Pushes that data to the relevant array, then console logs the collected data for a better user experience
+    // Pushes that data to the relevant array
 ]).then((response) => {
     const intern = new Intern (response.intName, response.intID, response.intEmail, response.intSchool)
     employees.push(intern)
-    console.log(intern)
 })
 } 
 // Collects and validates the user answers to the Inquirer questions RE: Team Manager  
 function TeamProfileGenerator() {
-return inquirer.prompt([
+    return inquirer.prompt([
     {
       type: "input",
       message: "Who is your team manager?",
@@ -126,7 +122,7 @@ return inquirer.prompt([
         type: "input",
         message: "Team manager's email?",
         name: "tmEmail",
-        validate: validateUserInput,
+        validate: validateEmail,
     },
     {
         type: "input",
@@ -134,12 +130,10 @@ return inquirer.prompt([
         name: "tmOffice",
         validate: validateUserInput,
     },
-  
     // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
-    // Pushes that data to the relevant array, then console logs the collected data for a better user experience
+    // Pushes that data to the relevant array
 ]).then ((response) => {
     const manager = new Manager (response.tmName, response.tmID, response.tmEmail, response.tmOffice)
-    console.log(manager)
     employees.push(manager)
     // Runs the TeamMemberChoice function to ask addition questions
     // It is in a new function as we loop back to the start of TeamMemberChoice depending on userInput
@@ -181,29 +175,23 @@ function FinishQs() {
         name: "finish",
         choices: finish,
     } 
-// Waits for the Inquirer to finish, then runs a new function depending on userInput
-// Once the User has chosen, it either runs the function to add another team member, or creates the HTML document
+    // Waits for the Inquirer to finish, then runs a new function depending on userInput
+    // Once the User has chosen, it either runs the function to add another team member, or creates the HTML document
 ]).then((response) => {
     if (response.finish === finish[0]) {
         TeamMemberChoice(response) 
     } else {
         console.log("Your team has now been created. ")
-        // Variable including all the responses from the Inquirer - to be passed to the HTML generating function
+        // Variable which passes the collected userInput to the render function
         const makeHTML = render(employees)
-        console.log(render)
-        console.log(employees)
+            // Creates a HTML document, sends it to the output folder and console logs if it was successful
             fs.writeFile(
             outputPath,
             makeHTML,   
             (err) => (err ? console.error(err) : console.log("HTML file has been generated!"))
             )
-       
-        
-
-    }
-   
-    
-})
+        } 
+    })
 }
 
 // Calls the function to ask the questions and then create the HTML
