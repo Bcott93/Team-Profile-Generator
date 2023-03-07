@@ -2,7 +2,6 @@
 const Manager = require("./lib/Manager")
 const Engineer = require("./lib/Engineer")
 const Intern = require("./lib/Intern")
-const Employee = require("./lib/Employee")
 const inquirer = require("inquirer")
 const path = require("path")
 const fs = require("fs")
@@ -13,9 +12,10 @@ const outputPath = path.join(OUTPUT_DIR, "team.html")
 
 // Accesses the data for the HTML page
 const render = require("./src/page-template.js")
-const { create } = require("domain")
+
 
 // Arrays - used to collect data from the Inquirer
+const employees = []
 const manager = []
 const engineers = []
 const interns = []
@@ -68,9 +68,9 @@ function EngineerQs() {
    // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
    // Pushes that data to the relevant array, then console logs the collected data for a better user experience
 ]).then((response) => {
-const eng = new Engineer (response.engName, response.engId, response.engEmail, response.engGithub)
-engineers.push(eng)
-console.log(eng)
+const engineer = new Engineer (response.engName, response.engId, response.engEmail, response.engGithub)
+employees.push(engineer)
+console.log(engineer)
 })
  
 }
@@ -104,9 +104,9 @@ function InternQs() {
     // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
     // Pushes that data to the relevant array, then console logs the collected data for a better user experience
 ]).then((response) => {
-    const int = new Intern (response.intName, response.intID, response.intEmail, response.intSchool)
-    interns.push(int)
-    console.log(int)
+    const intern = new Intern (response.intName, response.intID, response.intEmail, response.intSchool)
+    employees.push(intern)
+    console.log(intern)
 })
 } 
 // Collects and validates the user answers to the Inquirer questions RE: Team Manager  
@@ -140,9 +140,9 @@ return inquirer.prompt([
     // Waits for the Inquirer to finish, then sets a new variable using the responses and the relevant class
     // Pushes that data to the relevant array, then console logs the collected data for a better user experience
 ]).then ((response) => {
-    const teamManager = new Manager (response.tmName, response.tmID, response.tmEmail, response.tmOffice)
-    console.log(teamManager)
-    manager.push(teamManager)
+    const manager = new Manager (response.tmName, response.tmID, response.tmEmail, response.tmOffice)
+    console.log(manager)
+    employees.push(manager)
     // Runs the TeamMemberChoice function to ask addition questions
     // It is in a new function as we loop back to the start of TeamMemberChoice depending on userInput
     TeamMemberChoice(response)
@@ -191,17 +191,15 @@ function FinishQs() {
     } else {
         console.log("Your team has now been created. ")
         // Variable including all the responses from the Inquirer - to be passed to the HTML generating function
-        const employees = [manager, engineers, interns]
         const makeHTML = render(employees)
         console.log(render)
         console.log(employees)
-           .then(() => {
             fs.writeFile(
             outputPath,
             makeHTML,   
-            (err) => (err ? console.error(err) : console.log("Success"))
+            (err) => (err ? console.error(err) : console.log("HTML file has been generated!"))
             )
-        })
+       
         
 
     }
