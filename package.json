@@ -1,7 +1,6 @@
 {
   "name": "starter",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "directories": {
     "lib": "lib"
@@ -18,5 +17,14 @@
   },
   "devDependencies": {
     "jest": "^29.4.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bcott93/Team-Profile-Generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bcott93/Team-Profile-Generator/issues"
+  },
+  "homepage": "https://github.com/Bcott93/Team-Profile-Generator#readme",
+  "description": ""
 }

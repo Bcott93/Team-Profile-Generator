@@ -1,13 +1,13 @@
 // Accesses the required data from other pages, modules and nodes
-const Manager = require("./lib/Manager")
-const Engineer = require("./lib/Engineer")
-const Intern = require("./lib/Intern")
+const Manager = require("./assets/lib/Manager")
+const Engineer = require("./assets/lib/Engineer")
+const Intern = require("./assets/lib/Intern")
 const inquirer = require("inquirer")
 const path = require("path")
 const fs = require("fs")
 
 // Variables with the paths for the created HTML document
-const OUTPUT_DIR = path.resolve(__dirname, "output")
+const OUTPUT_DIR = path.resolve(__dirname, "./assets/output")
 const outputPath = path.join(OUTPUT_DIR, "team.html")
 
 // Accesses the data for the HTML page
@@ -16,9 +16,7 @@ const render = require("./src/page-template.js")
 
 // Arrays - used to collect data from the Inquirer
 const employees = []
-const manager = []
-const engineers = []
-const interns = []
+
 // Choice arrays for the Inquirer
 const tmChoices = ["Engineer", "Intern"]
 const finish = ["Choose another team member", "I'm finished creating my team"]
